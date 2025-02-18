@@ -1,0 +1,36 @@
+// This is your Prisma schema file,
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       Int    @id @default(autoincrement())
+  username String @unique
+  email    String @unique
+  password String
+  objectives Objective[]
+}
+
+model Video {
+  id     Int    @id @default(autoincrement())
+  name   String
+  level  String  // débutant, intermédiaire, confirmé
+  goal   String  // minceur, tonification, prise de muscle, bien-être, souplesse
+  body   String  // cardio, dos, bras, jambe, abdo, fessiers, full body
+  status String  @default("to_do") // to_do ou done
+  link   String
+}
+
+model Objective {
+  id       Int     @id @default(autoincrement())
+  rythm    Json    // Stockera les jours de sport sous forme de tableau JSON
+  status   Json    // Associe chaque jour à un statut (done, to_do)
+  userId   Int
+  user     User    @relation(fields: [userId], references: [id])
+}
