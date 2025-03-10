@@ -1,74 +1,112 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { StyleSheet, TouchableOpacity, Text } from 'react-native';
+import { useRouter } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
+import { Container } from '@/components/Container';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
+import { IconSymbol } from '@/components/ui/IconSymbol';
+import { useThemeColor } from "@/hooks/useThemeColor";
 
-export default function HomeScreen() {
+export default function DashboardScreen() {
+  const [user, setUser] = useState<{ username: string }>({ username: '' });
+  const router = useRouter();
+
+    const backgroundColor = useThemeColor("background");
+    const textColor = useThemeColor("text");
+    const placeholderColor = useThemeColor("placeholder");
+    const buttonColor = useThemeColor("button");
+
+  useEffect(() => {
+    const handleUserData = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+
+        if (!token) {
+          console.log('Token manquant');
+          router.replace('/login');
+          return;
+        }
+
+        const response = await axios.get('http://127.0.0.1:3000/dashboard', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        setUser({ username: response.data.username });
+      } catch (error) {
+        console.error('Erreur lors de la récupération des données utilisateur:', error);
+        router.replace('/login');
+      }
+    };
+
+    handleUserData();
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+  
+      if (!token) {
+        console.log("Aucun token trouvé, l'utilisateur est déjà déconnecté.");
+        return;
+      }
+
+      const response = await axios.post('http://127.0.0.1:3000/logout', {}, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+
+      console.log("Réponse du serveur :", response.data);
+  
+      await AsyncStorage.removeItem('token');
+      console.log("Token supprimé du stockage local");
+  
+      router.replace('/login');
+    } catch (error) {
+      console.error("Erreur lors de la déconnexion:", error);
+    }
+  };
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
+    <Container>
+      <ThemedView colorName="light" style={[styles.container, { backgroundColor }]}>
+        <ThemedText type="title" style={[styles.title, { color: textColor }]}>Hello, {user.username}</ThemedText>
+        <TouchableOpacity 
+          style={[
+            styles.buttonForm, { 
+              backgroundColor: buttonColor 
+            }]} 
+          onPress={handleLogout}
+        >
+        <Text style={styles.buttonText}>Se connecter</Text>
+        </TouchableOpacity>
+
       </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12'
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{' '}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+    </Container>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
+  container: {
+    padding: 20,
     alignItems: 'center',
-    gap: 8,
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 20,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  buttonForm: {
+    width: "100%",
+    borderRadius: 8,
+    padding: 10,
+    alignItems: "center",
+    margin: "auto",
+  },
+  buttonText: {
+    color: "#1B191F",
+    fontSize: 16,
+    fontWeight: "bold",
   },
 });

@@ -117,4 +117,14 @@ async function updateUserProfile(req, reply) {
   }
 }
 
-export default { registerUser, loginUser, getUserProfile, updateUserProfile };
+// Déconnexion de l'utilisateur
+async function logoutUser(req, reply) {
+  try {
+    return reply.code(200).send({ message: "Déconnexion réussie." });
+  } catch (error) {
+    console.error("Erreur lors de la déconnexion:", error);
+    return reply.code(500).send({ message: "Erreur lors de la déconnexion." });
+  }
+}
+
+export default { registerUser, loginUser, getUserProfile, updateUserProfile, logoutUser };

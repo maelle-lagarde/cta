@@ -27,7 +27,7 @@ fastify.decorate("authenticate", async (req, reply) => {
     try {
       await req.jwtVerify();
     } catch (err) {
-      reply.send(err);
+      reply.code(401).send({ message: "Connectez-vous pour accéder à cette page" });
     }
 });
   
