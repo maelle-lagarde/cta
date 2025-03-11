@@ -74,6 +74,16 @@ export default function LoginScreen() {
           <Text style={styles.buttonText}>Se connecter</Text>
           </TouchableOpacity>
         </View>
+
+        <View style={styles.footer}>
+          <Text style={[styles.footerText, { color: textColor }]}>
+            Vous n'avez pas de compte ?
+          </Text>
+          <TouchableOpacity onPress={() => router.push("/register")}>
+            <Text style={[styles.footerLink, { color: buttonColor }]}>Inscription</Text>
+          </TouchableOpacity>
+        </View>
+
       </ThemedView>
       </Container>
   );
@@ -123,5 +133,18 @@ const styles = StyleSheet.create({
     width: 245,
     height: 197,
     margin: 20,
+  },
+  footer: {
+    marginTop: 20,
+    alignItems: "center",
+  },
+  footerText: {
+    fontSize: 14,
+    marginBottom: 4,
+  },
+  footerLink: {
+    fontSize: 14,
+    fontWeight: "regular",
+    textDecorationLine: "underline",
   },
 });

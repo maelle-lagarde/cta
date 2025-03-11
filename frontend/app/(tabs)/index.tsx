@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { StyleSheet, TouchableOpacity, Text } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -71,16 +71,17 @@ export default function DashboardScreen() {
   return (
     <Container>
       <ThemedView colorName="light" style={[styles.container, { backgroundColor }]}>
-        <ThemedText type="title" style={[styles.title, { color: textColor }]}>Hello, {user.username}</ThemedText>
-        <TouchableOpacity 
-          style={[
-            styles.buttonForm, { 
-              backgroundColor: buttonColor 
-            }]} 
-          onPress={handleLogout}
-        >
-        <Text style={styles.buttonText}>Se connecter</Text>
+
+      <View style={styles.header}>
+        <ThemedText type="title" style={[styles.title, { color: textColor }]}>
+          Hello, {user.username}
+        </ThemedText>
+        
+        <TouchableOpacity onPress={handleLogout}>
+          <IconSymbol name="gear" size={28} color={textColor} />
+        
         </TouchableOpacity>
+      </View>
 
       </ThemedView>
     </Container>
@@ -97,16 +98,11 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 20,
   },
-  buttonForm: {
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
     width: "100%",
-    borderRadius: 8,
-    padding: 10,
-    alignItems: "center",
-    margin: "auto",
-  },
-  buttonText: {
-    color: "#1B191F",
-    fontSize: 16,
-    fontWeight: "bold",
+    paddingVertical: 10,
   },
 });

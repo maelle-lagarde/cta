@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Image } from "react-native";
 import { View, TextInput, Button, Alert, StyleSheet, TouchableOpacity, Text } from "react-native";
 import axios from "axios";
 import { useRouter } from "expo-router";
@@ -43,6 +44,11 @@ export default function RegisterScreen() {
 
   return (
     <Container>
+      <Image 
+        source={require('@/assets/images/logo.png')} 
+        style={styles.logo} 
+        resizeMode="contain"
+      />
       <ThemedView colorName="light" style={[styles.container, { backgroundColor }]}>
         <ThemedText type="title" style={[styles.title, { color: textColor }]}>Inscription</ThemedText>
 
@@ -81,6 +87,16 @@ export default function RegisterScreen() {
           <Text style={styles.buttonText}>Se connecter</Text>
           </TouchableOpacity>
         </View>
+
+        <View style={styles.footer}>
+          <Text style={[styles.footerText, { color: textColor }]}>
+            Vous avez un compte ?
+          </Text>
+          <TouchableOpacity onPress={() => router.push("/login")}>
+            <Text style={[styles.footerLink, { color: buttonColor }]}>Connexion</Text>
+          </TouchableOpacity>
+        </View>
+
       </ThemedView>
     </Container>
   );
@@ -125,5 +141,23 @@ const styles = StyleSheet.create({
     color: "#1B191F",
     fontSize: 16,
     fontWeight: "bold",
+  },
+  logo: {
+    width: 245,
+    height: 197,
+    margin: 20,
+  },
+  footer: {
+    marginTop: 20,
+    alignItems: "center",
+  },
+  footerText: {
+    fontSize: 14,
+    marginBottom: 4,
+  },
+  footerLink: {
+    fontSize: 14,
+    fontWeight: "regular",
+    textDecorationLine: "underline",
   },
 });
