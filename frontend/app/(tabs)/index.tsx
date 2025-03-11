@@ -8,6 +8,7 @@ import { Container } from '@/components/Container';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { IconSymbol } from '@/components/ui/IconSymbol';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useThemeColor } from "@/hooks/useThemeColor";
 
 export default function DashboardScreen() {
@@ -78,8 +79,7 @@ export default function DashboardScreen() {
         </ThemedText>
         
         <TouchableOpacity onPress={handleLogout}>
-          <IconSymbol name="gear" size={28} color={textColor} />
-        
+          <MaterialIcons name="logout" size={24} style={[{ color: textColor }]} />
         </TouchableOpacity>
       </View>
 

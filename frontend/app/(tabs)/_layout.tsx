@@ -1,10 +1,10 @@
 import { Tabs } from 'expo-router';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useRouter } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import { HapticTab } from '@/components/HapticTab';
 import { IconSymbol } from '@/components/ui/IconSymbol';
 import { useThemeColor } from "@/hooks/useThemeColor";
-import { Platform } from "react-native";
 import { FontProvider } from '@/providers/FontProvider';
 
 export default function TabLayout() {
@@ -18,7 +18,6 @@ export default function TabLayout() {
       <Tabs
         screenOptions={{
           headerShown: false,
-          // tabBarButton: HapticTab,
           tabBarStyle: {
             position: 'absolute',
             paddingTop: 10,

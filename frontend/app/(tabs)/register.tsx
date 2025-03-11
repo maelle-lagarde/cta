@@ -50,8 +50,11 @@ export default function RegisterScreen() {
         resizeMode="contain"
       />
       <ThemedView colorName="light" style={[styles.container, { backgroundColor }]}>
-        <ThemedText type="title" style={[styles.title, { color: textColor }]}>Inscription</ThemedText>
-
+        <Image 
+          source={require('@/assets/images/inscription.png')} 
+          style={styles.signup} 
+          resizeMode="contain"
+        />
         <View style={styles.form}>
           <TextInput
             placeholder="Nom d'utilisateur"
@@ -108,11 +111,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flex: 1,
   },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 20,
-  },
   subtitle: {
     fontSize: 16,
     marginBottom: 20,
@@ -146,6 +144,9 @@ const styles = StyleSheet.create({
     width: 245,
     height: 197,
     margin: 20,
+  },
+  signup: {
+    width: 163,
   },
   footer: {
     marginTop: 20,
